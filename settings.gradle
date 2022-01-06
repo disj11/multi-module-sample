@@ -1,0 +1,6 @@
+rootProject.name = 'multi-module'
+
+include 'api'
+include 'modules:activemq'
+include 'modules:mongodb'
+include 'clients:mongo-client'

@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+def gradleProjects() {
+    return subprojects.findAll { new File(it.projectDir, "build.gradle").exists() }
+}
+
+configure(gradleProjects()) {
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group 'org.example'
+    version '1.0-SNAPSHOT'
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        compileOnly 'org.projectlombok:lombok:1.18.22'
+        annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':clients:mongo-client') {
+    dependencies {
+        implementation project(':modules:mongodb')
+    }
+}
+
+project(':api') {
+    dependencies {
+        implementation project(':clients:mongo-client')
+    }
+}
